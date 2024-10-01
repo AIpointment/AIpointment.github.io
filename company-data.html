@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIpointment - Company Data</title>
+    <link rel="stylesheet" href="styles/company-data-styles.css">
+    <link rel="stylesheet" href="styles/footer-styles.css">
+    <link rel="stylesheet" href="styles/navbar-styles.css">
+</head>
+<body>
+     <!-- Navbar will be loaded here -->
+    <div id="navbar"></div>
+
+    <!-- Company Data Entry Form -->
+    <main class="data-entry-page">
+        <h2>Enter Company Data</h2>
+        <form id="companyDataForm">
+            <label for="companyName">Company Name:</label>
+            <input type="text" id="companyName" name="companyName" placeholder="Enter your company name" required>
+
+            <label for="taskType">Task Type:</label>
+            <select id="taskType" name="taskType" required>
+                <option value="medicalAppointment">Call to schedule a medical appointment</option>
+                <option value="delivery">Call for delivery appointment</option>
+            </select>
+
+            <label for="scheduleDate">Schedule Date:</label>
+            <input type="date" id="scheduleDate" name="scheduleDate" required>
+
+            <button type="submit">Submit</button>
+        </form>
+    </main>
+
+      <!-- Footer -->
+      <div id="footer"></div>
+
+      <script src="javascript/load-navbar-footer.js"></script>
+      <script src="javascript/form-handler.js"></script> <!-- Make sure the path is correct -->
+
+</body>
+</html>
