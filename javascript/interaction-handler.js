@@ -73,7 +73,7 @@ function handleSendMessage() {
     interactionControls.classList.add('hidden');
 
     // Send the message to the API
-    sendtextApiRequest(message);
+    sendApiRequest(message);
 }
 
 // Function to display user's message
@@ -89,68 +89,19 @@ function displayUserMessage(message) {
 
 // Function to send API request
 async function sendApiRequest(message, isInitialRequest = false) {
-    // // Show loading indicator
-    // updateStatus('loading', 'Loading...');
-    // // statusIcon.classList.remove('hidden');
-    //
-    // try {
-    //     // Construct the API URL with the message
-    //     const apiUrl = `https://aipointment-3cb9cb51d408.herokuapp.com/user_information?string1=${message[0]}&string2=${message[1]}&string3=${message[2]}`;
-    //
-    //     // Send the request to the API
-    //     const response = await fetch(apiUrl);
-    //
-    //     updateStatus('Connected', 'Connected');
-    //
-    //     if (!response.ok) {
-    //         updateStatus('error', 'Error occurred'); // Error state
-    //     }
-    //
-    //     // Parse the API response
-    //     const apiResponse = await response.json();
-    //     console.log("API Response:", apiResponse);
-    //
-    //     // Access the correct key in the API response
-    //     const answer = apiResponse["answer gpt "] || apiResponse["answer gpt "] || 'No answer found';
-    //
-    //     // Display the API response in the chatbox
-    //     displayApiResponse(answer);
-    //
-    //
-    // } catch (error) {
-    //     console.error('Error fetching API response:', error);
-    //     statusIcon.textContent = 'Error occurred while waiting for response';
-    //     displayApiResponse('Sorry, an error occurred. Please try again later.');
-    // } finally {
-    //     // Hide the loading status
-    //     updateStatus('Connected', 'Connected');
-    //     // statusIcon.classList.add('hidden');
-    //
-    //     if (isInitialRequest) {
-    //         // After initial request, display the input controls
-    //         interactionControls.classList.remove('hidden');
-    //     } else {
-    //         // After user's message, hide the input controls and show final section
-    //         // interactionControls.classList.add('hidden');
-    //         finalSection.classList.remove('hidden');
-    //     }
-    // }
-            const audioUrl = 'https://aipointment-3cb9cb51d408.herokuapp.com/get_audio'; // Replace with your audio file URL
-        const audioResponse = await fetch(audioUrl);
-        const audioBlob = await audioResponse.blob();
-        const audioObjUrl = URL.createObjectURL(audioBlob);
-        const audio = new Audio(audioObjUrl);
-        audio.play();
-}
-
-async function sendtextApiRequest(message, isInitialRequest = false) {
     // Show loading indicator
     updateStatus('loading', 'Loading...');
     // statusIcon.classList.remove('hidden');
 
     try {
-        // Construct the API URL with the message
-        const apiUrl = `https://aipointment-3cb9cb51d408.herokuapp.com/gpt?text=${message}`;
+    let apiUrl;
+    if (isInitialRequest){
+    // when initial request choose correct url
+        apiUrl = `https://aipointment-3cb9cb51d408.herokuapp.com/user_information?string1=${message[0]}&string2=${message[1]}&string3=${message[2]}`;
+    }
+    else{
+        apiUrl = `https://aipointment-3cb9cb51d408.herokuapp.com/gpt?text=${message}`;
+    }
 
         // Send the request to the API
         const response = await fetch(apiUrl);
@@ -171,6 +122,20 @@ async function sendtextApiRequest(message, isInitialRequest = false) {
         // Display the API response in the chatbox
         displayApiResponse(answer);
 
+
+        const audio_response = await fetch("http://localhost:5000/api/text-to-audio", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: answer })
+            });
+        const audioBlob = await audio_response.blob();
+        const audioObjUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(audioObjUrl);
+        audio.play();
+
+
     } catch (error) {
         console.error('Error fetching API response:', error);
         statusIcon.textContent = 'Error occurred while waiting for response';
@@ -189,7 +154,67 @@ async function sendtextApiRequest(message, isInitialRequest = false) {
             finalSection.classList.remove('hidden');
         }
     }
+
 }
+
+// async function sendtextApiRequest(message, isInitialRequest = false) {
+//     // Show loading indicator
+//     updateStatus('loading', 'Loading...');
+//     // statusIcon.classList.remove('hidden');
+//
+//     try {
+//         // Construct the API URL with the message
+//         const apiUrl = `https://aipointment-3cb9cb51d408.herokuapp.com/gpt?text=${message}`;
+//
+//         // Send the request to the API
+//         const response = await fetch(apiUrl);
+//
+//         updateStatus('Connected', 'Connected');
+//
+//         if (!response.ok) {
+//             updateStatus('error', 'Error occurred'); // Error state
+//         }
+//
+//         // Parse the API response
+//         const apiResponse = await response.json();
+//         console.log("API Response:", apiResponse);
+//
+//         // Access the correct key in the API response
+//         const answer = apiResponse["answer gpt "] || apiResponse["answer gpt "] || 'No answer found';
+//
+//         // Display the API response in the chatbox
+//         displayApiResponse(answer);
+//         const audio_response = await fetch("http://localhost:5000/api/text-to-audio", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ text: answer })
+//             });
+//         const audioBlob = await audio_response.blob();
+//         const audioObjUrl = URL.createObjectURL(audioBlob);
+//         const audio = new Audio(audioObjUrl);
+//         audio.play();
+//
+//     } catch (error) {
+//         console.error('Error fetching API response:', error);
+//         statusIcon.textContent = 'Error occurred while waiting for response';
+//         displayApiResponse('Sorry, an error occurred. Please try again later.');
+//     } finally {
+//         // Hide the loading status
+//         updateStatus('Connected', 'Connected');
+//         // statusIcon.classList.add('hidden');
+//
+//         if (isInitialRequest) {
+//             // After initial request, display the input controls
+//             interactionControls.classList.remove('hidden');
+//         } else {
+//             // After user's message, hide the input controls and show final section
+//             // interactionControls.classList.add('hidden');
+//             finalSection.classList.remove('hidden');
+//         }
+//     }
+// }
 
 // Function to display the API response
 function displayApiResponse(apiResponse) {

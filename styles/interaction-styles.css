@@ -25,7 +25,7 @@ body {
     align-items: center;
     flex-grow: 1; /* Ensures the main content expands to fill the available space */
     padding: 40px;
-    overflow: hidden; /* Prevents scrolling within the interaction section */
+    overflow: visible; /* Prevents scrolling within the interaction section */
 }
 
 /* Interaction Container */
@@ -280,4 +280,25 @@ footer {
 
 #backButton:hover {
     background-color: #ff8f33;
+}
+
+#recordButton {
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    outline: none;
+}
+
+#recordButton:active {
+    transform: scale(0.95);
+}
+
+#recordButton:hover {
+    background-color: #45a049;
 }
